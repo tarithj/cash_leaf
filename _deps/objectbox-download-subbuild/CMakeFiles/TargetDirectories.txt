@@ -1,0 +1,3 @@
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/CMakeFiles/objectbox-download-populate.dir
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/CMakeFiles/edit_cache.dir
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/CMakeFiles/objectbox-download-populate"
+		},
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/CMakeFiles/objectbox-download-populate.rule"
+		},
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/CMakeFiles/objectbox-download-populate-complete.rule"
+		},
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-build.rule"
+		},
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-configure.rule"
+		},
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-download.rule"
+		},
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-install.rule"
+		},
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-patch.rule"
+		},
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-test.rule"
+		},
+		{
+			"file" : "/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"objectbox-download-populate"
+		],
+		"name" : "objectbox-download-populate"
+	}
+}

@@ -1,0 +1,14 @@
+# Target labels
+ objectbox-download-populate
+# Source files and their labels
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/CMakeFiles/objectbox-download-populate
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/CMakeFiles/objectbox-download-populate.rule
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/CMakeFiles/objectbox-download-populate-complete.rule
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-build.rule
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-configure.rule
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-download.rule
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-install.rule
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-mkdir.rule
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-patch.rule
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-test.rule
+/home/tarith/AndroidStudioProjects/cash_leaf/_deps/objectbox-download-subbuild/objectbox-download-populate-prefix/src/objectbox-download-populate-stamp/objectbox-download-populate-update.rule
