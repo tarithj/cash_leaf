@@ -20,11 +20,6 @@
           "type": 8
         },
         {
-          "id": "3:5367089645445496773",
-          "name": "effect",
-          "type": 6
-        },
-        {
           "id": "4:6598383556761018799",
           "name": "title",
           "type": 9
@@ -70,7 +65,9 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    5367089645445496773
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

@@ -1,13 +1,17 @@
-import 'package:cash_leaf/common/currency.dart';
+import 'package:cash_leaf/common/extensions/datetime.dart';
 import 'package:cash_leaf/components/date_picker_button.dart';
 import 'package:cash_leaf/components/time_picker_button.dart';
 import 'package:cash_leaf/components/title_card.dart';
 import 'package:cash_leaf/storage/account/record.dart';
 import 'package:flutter/material.dart';
-import 'package:cash_leaf/common/extensions/datetime.dart';
 
 class TransactionEditor extends StatefulWidget {
-  const TransactionEditor({Key? key, required this.onDone, this.srcRecord, required this.submitButtonText}) : super(key: key);
+  const TransactionEditor(
+      {Key? key,
+      required this.onDone,
+      this.srcRecord,
+      required this.submitButtonText})
+      : super(key: key);
 
   final void Function(Record) onDone;
   final Record? srcRecord;
@@ -18,7 +22,6 @@ class TransactionEditor extends StatefulWidget {
 }
 
 class _TransactionEditorState extends State<TransactionEditor> {
-
   final _formKey = GlobalKey<FormState>();
   DateTime _selectedDateTime = DateTime.now();
   String value = "";
@@ -29,17 +32,20 @@ class _TransactionEditorState extends State<TransactionEditor> {
     super.initState();
     if (widget.srcRecord != null) {
       _record = widget.srcRecord!;
-      _selectedDateTime = (widget.srcRecord == null? DateTime.now() : widget.srcRecord?.getCreatedDateTime())!;
+      _selectedDateTime = (widget.srcRecord == null
+          ? DateTime.now()
+          : widget.srcRecord?.getCreatedDateTime())!;
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return getForm();
   }
 
   Widget getBasicInfoCard() {
-    const inputPadding = EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25);
+    const inputPadding =
+        EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25);
 
     return TitleCard(
       title: "Basic Info",
@@ -48,7 +54,9 @@ class _TransactionEditorState extends State<TransactionEditor> {
           padding: inputPadding,
           child: TextFormField(
             initialValue: _record.title,
-            onChanged: (text){_record.title = text;},
+            onChanged: (text) {
+              _record.title = text;
+            },
             validator: (text) {
               if (text == null || text.isEmpty) {
                 return "Please enter an title";
@@ -65,12 +73,13 @@ class _TransactionEditorState extends State<TransactionEditor> {
           child: TextFormField(
             initialValue: _record.amount.toString(),
             keyboardType: TextInputType.number,
-            onChanged: (text){value = text;},
+            onChanged: (text) {
+              value = text;
+            },
             validator: (text) {
               if (text == null || text.isEmpty) {
                 return "Please enter an amount";
-              }
-              else if (double.tryParse(text) == null) {
+              } else if (double.tryParse(text) == null) {
                 return "Please enter an amount using only [0-9]";
               }
               return null;
@@ -87,20 +96,18 @@ class _TransactionEditorState extends State<TransactionEditor> {
             children: [
               DatePickerButton(
                   selectedDate: _selectedDateTime,
-                  onSelect: (date){
+                  onSelect: (date) {
                     setState(() {
                       _selectedDateTime = date;
                     });
-                  }
-              ),
+                  }),
               TimePickerButton(
                   selectedTime: _selectedDateTime,
-                  onSelect: (time){
+                  onSelect: (time) {
                     setState(() {
                       _selectedDateTime = _selectedDateTime.setTimeOfDay(time);
                     });
-                  }
-              )
+                  })
             ],
           ),
         ),
@@ -109,7 +116,8 @@ class _TransactionEditorState extends State<TransactionEditor> {
   }
 
   Widget getOptionalInfoCard() {
-    const inputPadding = EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25);
+    const inputPadding =
+        EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25);
 
     return TitleCard(
       title: "Optional Info",
@@ -118,7 +126,9 @@ class _TransactionEditorState extends State<TransactionEditor> {
           padding: inputPadding,
           child: TextFormField(
             initialValue: _record.note,
-            onChanged: (text){ _record.note = text; },
+            onChanged: (text) {
+              _record.note = text;
+            },
             decoration: const InputDecoration(
               labelText: "Note",
             ),
@@ -128,61 +138,21 @@ class _TransactionEditorState extends State<TransactionEditor> {
     );
   }
 
-  Widget getTransactionTypeCard() {
-    return TitleCard(
-      title: "Effect Type",
-      children: [
-        ListTile(
-          title: const Text('Positive'),
-          leading: Radio<int>(
-            value: effectPositive,
-            groupValue: _record.effect,
-            onChanged: (int? value) {
-              setState(() {
-                _record.effect = value!;
-              });
-            },
-          ),
-        ),
-        ListTile(
-          title: const Text('Negative'),
-          leading: Radio<int>(
-            value: effectNegative,
-            groupValue: _record.effect,
-            onChanged: (int? value) {
-              setState(() {
-                _record.effect = value!;
-              });
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget getForm() {
-
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          getTransactionTypeCard(),
-
-          const SizedBox(height: 25),
-
           getBasicInfoCard(),
-
           const SizedBox(height: 25),
-
           getOptionalInfoCard(),
-
           const SizedBox(height: 25),
-
           ElevatedButton(
             onPressed: () {
               // Validate returns true if the form is valid, or false otherwise.
               if (_formKey.currentState!.validate()) {
-                _record.createdTimestamp = _selectedDateTime.millisecondsSinceEpoch;
+                _record.createdTimestamp =
+                    _selectedDateTime.millisecondsSinceEpoch;
 
                 if (value.isNotEmpty) {
                   _record.amount = double.parse(value);
