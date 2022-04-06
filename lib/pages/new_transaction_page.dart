@@ -1,43 +1,44 @@
 import 'package:cash_leaf/components/transaction_editor.dart';
-import 'package:cash_leaf/storage/account/account_model.dart';
 import 'package:cash_leaf/storage/account/record.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class NewTransactionPage extends StatelessWidget {
-  const NewTransactionPage({Key? key}) : super(key: key);
+class NewTransactionPage extends StatefulWidget {
+  const NewTransactionPage({Key? key, required this.onDone}) : super(key: key);
+
+  final void Function(Record) onDone;
+
+  @override
+  State<NewTransactionPage> createState() => _NewTransactionPageState();
+}
+
+class _NewTransactionPageState extends State<NewTransactionPage> {
+  Record stateRecord = Record.only();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("New Transactions"),
+        title: const Text("New Transactions"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                widget.onDone(stateRecord);
+              },
+              icon: const Icon(Icons.save))
+        ],
       ),
-      body: getBody(context)
+      body: getBody(context),
     );
   }
 
   Widget getBody(BuildContext context) {
     return SingleChildScrollView(
-        child: Column(
-            children: [
-              Container(
-                  padding: const EdgeInsets.only(top: 10, left: 2, right: 2),
-                  child: TransactionEditor(submitButtonText: "Add", onDone: (Record record) {
-                    Provider.of<AccountModel>(context, listen: false).addRecord(
-                        record
-                    );
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Added Transaction'),
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
-                  })
-              )
-            ]
-        )
-    );
+        child: Column(children: [
+      Container(
+          padding: const EdgeInsets.only(top: 10, left: 2, right: 2),
+          child: TransactionEditor(onChange: (Record record) {
+            stateRecord = record;
+          }))
+    ]));
   }
 }
