@@ -3,6 +3,7 @@ import 'package:cash_leaf/components/date_picker_button.dart';
 import 'package:cash_leaf/components/time_picker_button.dart';
 import 'package:cash_leaf/storage/account/record.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TransactionEditor extends StatefulWidget {
   const TransactionEditor({Key? key, this.srcRecord, required this.onChange})
@@ -17,7 +18,6 @@ class TransactionEditor extends StatefulWidget {
 
 class _TransactionEditorState extends State<TransactionEditor> {
   final _formKey = GlobalKey<FormState>();
-  DateTime _selectedDateTime = DateTime.now();
   String value = "";
   late Record _record = Record.only();
 
@@ -26,10 +26,10 @@ class _TransactionEditorState extends State<TransactionEditor> {
     super.initState();
     if (widget.srcRecord != null) {
       _record = widget.srcRecord!;
-      _selectedDateTime = (widget.srcRecord == null
-          ? DateTime.now()
-          : widget.srcRecord?.getCreatedDateTime())!;
     }
+    _record.createdTimestamp = (widget.srcRecord == null
+        ? DateTime.now().millisecondsSinceEpoch
+        : widget.srcRecord?.getCreatedDateTime().millisecondsSinceEpoch)!;
   }
 
   @override
@@ -71,10 +71,14 @@ class _TransactionEditorState extends State<TransactionEditor> {
               padding: inputPadding,
               child: TextFormField(
                 initialValue: _record.amount.toString(),
-                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]|\.')),
+                ],
+                keyboardType: const TextInputType.numberWithOptions(
+                    signed: false, decimal: false),
                 onChanged: (text) {
                   setState(() {
-                    value = text;
+                    _record.amount = double.parse(text.isEmpty ? "0" : text);
                   });
                   widget.onChange(_record);
                 },
@@ -98,7 +102,7 @@ class _TransactionEditorState extends State<TransactionEditor> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   DatePickerButton(
-                      selectedDate: _selectedDateTime,
+                      selectedDate: _record.getCreatedDateTime(),
                       onSelect: (date) {
                         setState(() {
                           _record.createdTimestamp =
@@ -107,10 +111,11 @@ class _TransactionEditorState extends State<TransactionEditor> {
                         widget.onChange(_record);
                       }),
                   TimePickerButton(
-                      selectedTime: _selectedDateTime,
+                      selectedTime: _record.getCreatedDateTime(),
                       onSelect: (time) {
                         setState(() {
-                          _record.createdTimestamp = _selectedDateTime
+                          _record.createdTimestamp = _record
+                              .getCreatedDateTime()
                               .setTimeOfDay(time)
                               .millisecondsSinceEpoch;
                         });
