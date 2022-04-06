@@ -1,5 +1,6 @@
 import 'package:cash_leaf/components/transaction_list.dart';
 import 'package:cash_leaf/pages/new_transaction_page.dart';
+import 'package:cash_leaf/storage/account/record.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,20 +19,27 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     const actionIconPadding = EdgeInsets.all(12);
     return Scaffold(
-      appBar: AppBar(
-          actions: [
-            Padding(
-              padding: actionIconPadding,
-              child: IconButton(
-                  onPressed: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                      return const NewTransactionPage();
-                    }));
-                  },
-                  icon: const Icon(Icons.add)
-              ),
-            )
-          ]),
+      appBar: AppBar(actions: [
+        Padding(
+          padding: actionIconPadding,
+          child: IconButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return NewTransactionPage(onDone: (Record r) {
+                    final account =
+                        Provider.of<AccountModel>(context, listen: false);
+                    account.addRecord(r);
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Created Transaction'),
+                    ));
+                  });
+                }));
+              },
+              icon: const Icon(Icons.add)),
+        )
+      ]),
       body: getBody(),
     );
   }
@@ -45,28 +53,23 @@ class _HomePageState extends State<HomePage> {
         children: [
           SizedBox(
             height: size.height * 0.2,
-            child: Center(
-              child: Consumer<AccountModel>(
-                builder: (context, account, child) {
-                  return MoneyDisplay(value: account.getSumOfTransactionOnWeek(DateTime.now()), symbol: account.currencySuffix);
-                }
-              )
-            ),
+            child: Center(child:
+                Consumer<AccountModel>(builder: (context, account, child) {
+              return MoneyDisplay(
+                  value: account.getSumOfTransactionOnWeek(DateTime.now()),
+                  symbol: account.currencySuffix);
+            })),
           ),
-          Consumer<AccountModel>(
-            builder: (context, account, child){
-              return TransactionList(
-                records: account.getRecordsOnWeek(DateTime.now()).toList(),
-                currencySymbol: account.currencySuffix,
-                enableMonthHeading: false,
-                enableYearHeading: false,
-              );
-            }
-          )
+          Consumer<AccountModel>(builder: (context, account, child) {
+            return TransactionList(
+              records: account.getRecordsOnWeek(DateTime.now()).toList(),
+              currencySymbol: account.currencySuffix,
+              enableMonthHeading: false,
+              enableYearHeading: false,
+            );
+          })
         ],
       ),
     );
   }
-
-
 }

@@ -1,21 +1,16 @@
 import 'package:cash_leaf/common/extensions/datetime.dart';
 import 'package:cash_leaf/components/date_picker_button.dart';
 import 'package:cash_leaf/components/time_picker_button.dart';
-import 'package:cash_leaf/components/title_card.dart';
 import 'package:cash_leaf/storage/account/record.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TransactionEditor extends StatefulWidget {
-  const TransactionEditor(
-      {Key? key,
-      required this.onDone,
-      this.srcRecord,
-      required this.submitButtonText})
+  const TransactionEditor({Key? key, this.srcRecord, required this.onChange})
       : super(key: key);
 
-  final void Function(Record) onDone;
   final Record? srcRecord;
-  final String submitButtonText;
+  final void Function(Record) onChange;
 
   @override
   State<TransactionEditor> createState() => _TransactionEditorState();
@@ -23,7 +18,6 @@ class TransactionEditor extends StatefulWidget {
 
 class _TransactionEditorState extends State<TransactionEditor> {
   final _formKey = GlobalKey<FormState>();
-  DateTime _selectedDateTime = DateTime.now();
   String value = "";
   late Record _record = Record.only();
 
@@ -32,10 +26,10 @@ class _TransactionEditorState extends State<TransactionEditor> {
     super.initState();
     if (widget.srcRecord != null) {
       _record = widget.srcRecord!;
-      _selectedDateTime = (widget.srcRecord == null
-          ? DateTime.now()
-          : widget.srcRecord?.getCreatedDateTime())!;
     }
+    _record.createdTimestamp = (widget.srcRecord == null
+        ? DateTime.now().millisecondsSinceEpoch
+        : widget.srcRecord?.getCreatedDateTime().millisecondsSinceEpoch)!;
   }
 
   @override
@@ -43,127 +37,113 @@ class _TransactionEditorState extends State<TransactionEditor> {
     return getForm();
   }
 
-  Widget getBasicInfoCard() {
-    const inputPadding =
-        EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25);
-
-    return TitleCard(
-      title: "Basic Info",
-      children: [
-        Container(
-          padding: inputPadding,
-          child: TextFormField(
-            initialValue: _record.title,
-            onChanged: (text) {
-              _record.title = text;
-            },
-            validator: (text) {
-              if (text == null || text.isEmpty) {
-                return "Please enter an title";
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              labelText: "Title",
-            ),
-          ),
-        ),
-        Container(
-          padding: inputPadding,
-          child: TextFormField(
-            initialValue: _record.amount.toString(),
-            keyboardType: TextInputType.number,
-            onChanged: (text) {
-              value = text;
-            },
-            validator: (text) {
-              if (text == null || text.isEmpty) {
-                return "Please enter an amount";
-              } else if (double.tryParse(text) == null) {
-                return "Please enter an amount using only [0-9]";
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              labelText: "Amount",
-            ),
-          ),
-        ),
-        Container(
-          padding: inputPadding,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              DatePickerButton(
-                  selectedDate: _selectedDateTime,
-                  onSelect: (date) {
-                    setState(() {
-                      _selectedDateTime = date;
-                    });
-                  }),
-              TimePickerButton(
-                  selectedTime: _selectedDateTime,
-                  onSelect: (time) {
-                    setState(() {
-                      _selectedDateTime = _selectedDateTime.setTimeOfDay(time);
-                    });
-                  })
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget getOptionalInfoCard() {
-    const inputPadding =
-        EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25);
-
-    return TitleCard(
-      title: "Optional Info",
-      children: [
-        Container(
-          padding: inputPadding,
-          child: TextFormField(
-            initialValue: _record.note,
-            onChanged: (text) {
-              _record.note = text;
-            },
-            decoration: const InputDecoration(
-              labelText: "Note",
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
   Widget getForm() {
+    var inputPadding = const EdgeInsets.all(3);
+
     return Form(
       key: _formKey,
-      child: Column(
-        children: [
-          getBasicInfoCard(),
-          const SizedBox(height: 25),
-          getOptionalInfoCard(),
-          const SizedBox(height: 25),
-          ElevatedButton(
-            onPressed: () {
-              // Validate returns true if the form is valid, or false otherwise.
-              if (_formKey.currentState!.validate()) {
-                _record.createdTimestamp =
-                    _selectedDateTime.millisecondsSinceEpoch;
-
-                if (value.isNotEmpty) {
-                  _record.amount = double.parse(value);
-                }
-                widget.onDone(_record);
-              }
-            },
-            child: Text(widget.submitButtonText),
-          ),
-          const SizedBox(height: 50)
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
+        child: Column(
+          children: [
+            Container(
+              padding: inputPadding,
+              child: TextFormField(
+                initialValue: _record.title,
+                onChanged: (text) {
+                  setState(() {
+                    _record.title = text;
+                  });
+                  widget.onChange(_record);
+                },
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
+                    return "Please enter an title";
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  labelText: "Title",
+                ),
+              ),
+            ),
+            Container(
+              padding: inputPadding,
+              child: TextFormField(
+                initialValue: _record.amount.toString(),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]|\.')),
+                ],
+                keyboardType: const TextInputType.numberWithOptions(
+                    signed: false, decimal: false),
+                onChanged: (text) {
+                  setState(() {
+                    _record.amount = double.parse(text.isEmpty ? "0" : text);
+                  });
+                  widget.onChange(_record);
+                },
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
+                    return "Please enter an amount";
+                  } else if (double.tryParse(text) == null) {
+                    return "Please enter an amount using only [0-9]";
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  labelText: "Amount",
+                ),
+              ),
+            ),
+            const SizedBox(height: 25),
+            Container(
+              padding: inputPadding,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  DatePickerButton(
+                      selectedDate: _record.getCreatedDateTime(),
+                      onSelect: (date) {
+                        setState(() {
+                          _record.createdTimestamp =
+                              date.millisecondsSinceEpoch;
+                        });
+                        widget.onChange(_record);
+                      }),
+                  TimePickerButton(
+                      selectedTime: _record.getCreatedDateTime(),
+                      onSelect: (time) {
+                        setState(() {
+                          _record.createdTimestamp = _record
+                              .getCreatedDateTime()
+                              .setTimeOfDay(time)
+                              .millisecondsSinceEpoch;
+                        });
+                        widget.onChange(_record);
+                      })
+                ],
+              ),
+            ),
+            const SizedBox(height: 25),
+            Container(
+              padding: inputPadding,
+              child: TextFormField(
+                initialValue: _record.note,
+                onChanged: (text) {
+                  setState(() {
+                    _record.note = text;
+                  });
+                  widget.onChange(_record);
+                },
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: const InputDecoration(
+                  labelText: "Note",
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
