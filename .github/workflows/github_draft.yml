@@ -48,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Flutter Gallery ${{ github.ref }}
+          release_name: CashLeaf ${{ github.ref }}
           body_path: CHANGELOG.md
           draft: true
           prerelease: false
@@ -93,8 +93,8 @@ jobs:
           flutter config --enable-macos-desktop
           flutter config --enable-windows-desktop
       - run: flutter doctor -v
-      # Checkout gallery code, recreate missing files, and get packages.
-      - name: Checkout gallery code
+      # Checkout code, recreate missing files, and get packages.
+      - name: Checkout code
         uses: actions/checkout@v2
       - run: flutter create .
       - run: flutter pub get
