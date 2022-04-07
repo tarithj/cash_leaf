@@ -1,11 +1,12 @@
 import 'package:cash_leaf/components/serach_box.dart';
 import 'package:cash_leaf/components/transaction.dart';
+import 'package:cash_leaf/components/transaction_list.dart';
 import 'package:cash_leaf/pages/edit_transaction_page.dart';
 import 'package:cash_leaf/storage/account/account_model.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:cash_leaf/storage/account/record.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
       padding: padding,
       child: Column(
         children: [
-          SearchBox(onChange: (text){
+          SearchBox(onChange: (text) {
             setState(() {
               query = text;
             });
@@ -39,16 +40,16 @@ class _TransactionsPageState extends State<TransactionsPage> {
           const SizedBox(height: 20),
           Consumer<AccountModel>(builder: (context, account, child) {
             List<Record> records = [];
-            if (query == ""){
+            if (query == "") {
               records = account.records;
             } else {
-              records = account.getRecordsWithTitleContainsString(query).toList();
+              records =
+                  account.getRecordsWithTitleContainsString(query).toList();
             }
 
-            var transactions = getTransactionList(
-                records: records,
-                currencySymbol: account.currencySuffix);
-            return Column(children: transactions);
+            var transactions = TransactionList(
+                records: records, currencySymbol: account.currencySuffix);
+            return Column(children: [transactions]);
           })
         ],
       ),
