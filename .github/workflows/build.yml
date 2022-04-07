@@ -24,9 +24,6 @@ jobs:
       # Checkout code and get packages.
       - name: Checkout code
         uses: actions/checkout@v2
-              
-      - name: Setup Project
       - run: sh ./scripts/setup.sh
-
       - run: flutter pub get -v        
       - run: flutter build ${{ matrix.target }}
