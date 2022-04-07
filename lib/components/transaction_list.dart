@@ -10,7 +10,13 @@ import '../storage/account/account_model.dart';
 import '../storage/account/record.dart';
 
 class TransactionList extends StatelessWidget {
-  const TransactionList({Key? key, required this.records, required this.currencySymbol, this.enableMonthHeading = true, this.enableYearHeading = true}) : super(key: key);
+  const TransactionList(
+      {Key? key,
+      required this.records,
+      required this.currencySymbol,
+      this.enableMonthHeading = true,
+      this.enableYearHeading = true})
+      : super(key: key);
 
   final List<Record> records;
   final String currencySymbol;
@@ -18,7 +24,6 @@ class TransactionList extends StatelessWidget {
   final bool enableYearHeading;
   final bool enableMonthHeading;
 
-  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,7 +36,7 @@ class TransactionList extends StatelessWidget {
       return [];
     }
     records.sort(
-            (a, b) => b.getCreatedDateTime().compareTo(a.getCreatedDateTime()));
+        (a, b) => b.getCreatedDateTime().compareTo(a.getCreatedDateTime()));
 
     int lastYear = records[0].getCreatedDateTime().year;
     int lastMonth = records[0].getCreatedDateTime().month;
@@ -44,9 +49,8 @@ class TransactionList extends StatelessWidget {
       );
     }
     if (enableMonthHeading) {
-      recordItems.add(
-        MonthHeading(month: DateFormat('MMMM').format(DateTime(0, lastMonth)).toString())
-      );
+      recordItems.add(MonthHeading(
+          month: DateFormat('MMMM').format(DateTime(0, lastMonth)).toString()));
     }
 
     for (var record in records) {
@@ -54,9 +58,11 @@ class TransactionList extends StatelessWidget {
         lastYear = record.getCreatedDateTime().year;
         recordItems.add(YearHeading(year: lastYear.toString()));
       }
-      if (enableMonthHeading && lastMonth != record.getCreatedDateTime().month) {
-        lastMonth = record.getCreatedDateTime().year;
-        recordItems.add(MonthHeading(month: DateFormat('MMMM').format(DateTime(0, lastMonth))));
+      if (enableMonthHeading &&
+          lastMonth != record.getCreatedDateTime().month) {
+        lastMonth = record.getCreatedDateTime().month;
+        recordItems.add(MonthHeading(
+            month: DateFormat('MMMM').format(DateTime(0, lastMonth))));
       }
 
       recordItems.add(Transaction(
@@ -116,5 +122,4 @@ class TransactionList extends StatelessWidget {
 
     return recordItems;
   }
-
 }
