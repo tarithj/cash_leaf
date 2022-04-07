@@ -1,0 +1,29 @@
+name: Builds
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ["apk --debug", "ios --no-codesign"]
+    steps:
+      # Set up Flutter.
+      - name: Clone Flutter repository with master channel
+        uses: subosito/flutter-action@4389e6cbc6cb8a4b18c628ff96ff90be0e926aa8
+        with:
+          channel: master
+      - run: flutter doctor -v
+
+      # Checkout code and get packages.
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: flutter pub get -v
+
+      - run: flutter build ${{ matrix.target }}
