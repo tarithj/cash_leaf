@@ -61,7 +61,7 @@ class _TransactionEditorState extends State<TransactionEditor> {
                   labelText: "Title",
                 ),
                 validator: (text) {
-                  return text == null || text == "k"
+                  return text == null || text.isEmpty
                       ? "title must not be empty"
                       : null;
                 },
