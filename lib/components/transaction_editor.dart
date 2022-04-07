@@ -6,18 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TransactionEditor extends StatefulWidget {
-  const TransactionEditor({Key? key, this.srcRecord, required this.onChange})
+  const TransactionEditor(
+      {Key? key, this.srcRecord, required this.onChange, required this.formKey})
       : super(key: key);
 
   final Record? srcRecord;
   final void Function(Record) onChange;
+  final GlobalKey<FormState> formKey;
 
   @override
   State<TransactionEditor> createState() => _TransactionEditorState();
 }
 
 class _TransactionEditorState extends State<TransactionEditor> {
-  final _formKey = GlobalKey<FormState>();
   String value = "";
   late Record _record = Record.only();
 
@@ -41,7 +42,7 @@ class _TransactionEditorState extends State<TransactionEditor> {
     var inputPadding = const EdgeInsets.all(3);
 
     return Form(
-      key: _formKey,
+      key: widget.formKey,
       child: Padding(
         padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
         child: Column(
