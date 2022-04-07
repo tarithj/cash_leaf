@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ["apk --debug", "ios --no-codesign"]
+        target: ["apk --debug"]
     steps:
       # Set up Flutter.
       - name: Clone Flutter repository with master channel
@@ -24,6 +24,9 @@ jobs:
       # Checkout code and get packages.
       - name: Checkout code
         uses: actions/checkout@v2
-      - run: flutter pub get -v
+              
+      - name: Setup Project
+      - run: sh ./scripts/setup.sh
 
+      - run: flutter pub get -v        
       - run: flutter build ${{ matrix.target }}
