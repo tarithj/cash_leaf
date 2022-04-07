@@ -85,6 +85,8 @@ class _TransactionEditorState extends State<TransactionEditor> {
                 validator: (text) {
                   if (text == null || text.isEmpty) {
                     return "Please enter an amount";
+                  } else if (double.parse(text) <= 0) {
+                    return "Amount must be larger than 0";
                   }
                 },
                 decoration: const InputDecoration(
