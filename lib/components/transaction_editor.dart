@@ -88,6 +88,7 @@ class _TransactionEditorState extends State<TransactionEditor> {
                   } else if (double.parse(text) <= 0) {
                     return "Amount must be larger than 0";
                   }
+                  return null;
                 },
                 decoration: const InputDecoration(
                   labelText: "Amount",
