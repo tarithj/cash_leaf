@@ -35,10 +35,14 @@ class _NewTransactionPageState extends State<NewTransactionPage> {
     return SingleChildScrollView(
         child: Column(children: [
       Container(
-          padding: const EdgeInsets.only(top: 10, left: 2, right: 2),
-          child: TransactionEditor(onChange: (Record record) {
+        padding: const EdgeInsets.only(top: 10, left: 2, right: 2),
+        child: TransactionEditor(
+          onChange: (Record record) {
             stateRecord = record;
-          }))
+          },
+          formKey: GlobalKey<FormState>(),
+        ),
+      )
     ]));
   }
 }
