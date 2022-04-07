@@ -44,6 +44,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
             onChange: (Record r) {
               stateRecord = r;
             },
+            formKey: GlobalKey<FormState>(),
           )),
     ]));
   }
