@@ -57,15 +57,14 @@ class _TransactionEditorState extends State<TransactionEditor> {
                   });
                   widget.onChange(_record);
                 },
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return "Please enter an title";
-                  }
-                  return null;
-                },
                 decoration: const InputDecoration(
                   labelText: "Title",
                 ),
+                validator: (text) {
+                  return text == null || text == "k"
+                      ? "title must not be empty"
+                      : null;
+                },
               ),
             ),
             Container(
@@ -86,10 +85,7 @@ class _TransactionEditorState extends State<TransactionEditor> {
                 validator: (text) {
                   if (text == null || text.isEmpty) {
                     return "Please enter an amount";
-                  } else if (double.tryParse(text) == null) {
-                    return "Please enter an amount using only [0-9]";
                   }
-                  return null;
                 },
                 decoration: const InputDecoration(
                   labelText: "Amount",
