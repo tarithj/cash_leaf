@@ -16,6 +16,7 @@ class EditTransactionPage extends StatefulWidget {
 
 class _EditTransactionPageState extends State<EditTransactionPage> {
   late Record stateRecord;
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,9 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
           actions: [
             IconButton(
                 onPressed: () {
-                  widget.onDone(stateRecord);
+                  if (formKey.currentState!.validate()) {
+                    widget.onDone(stateRecord);
+                  }
                 },
                 icon: const Icon(Icons.save))
           ],
@@ -40,11 +43,11 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
       Container(
           padding: const EdgeInsets.only(top: 10, left: 2, right: 2),
           child: TransactionEditor(
-            srcRecord: widget.record,
-            onChange: (Record r) {
-              stateRecord = r;
-            },
-          )),
+              srcRecord: widget.record,
+              onChange: (Record r) {
+                stateRecord = r;
+              },
+              formKey: formKey)),
     ]));
   }
 }
