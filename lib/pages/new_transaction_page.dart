@@ -13,6 +13,7 @@ class NewTransactionPage extends StatefulWidget {
 
 class _NewTransactionPageState extends State<NewTransactionPage> {
   Record stateRecord = Record.only();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,9 @@ class _NewTransactionPageState extends State<NewTransactionPage> {
         actions: [
           IconButton(
               onPressed: () {
-                widget.onDone(stateRecord);
+                if (formKey.currentState!.validate()) {
+                  widget.onDone(stateRecord);
+                }
               },
               icon: const Icon(Icons.save))
         ],
@@ -40,7 +43,7 @@ class _NewTransactionPageState extends State<NewTransactionPage> {
           onChange: (Record record) {
             stateRecord = record;
           },
-          formKey: GlobalKey<FormState>(),
+          formKey: formKey,
         ),
       )
     ]));
